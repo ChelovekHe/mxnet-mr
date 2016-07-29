@@ -29,6 +29,7 @@
     <Compile Include="charsbatchtest.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="charsdirtest.py" />
     <Compile Include="charstest.py" />
     <Compile Include="charstrain.py" />
     <Compile Include="generatesynsetwords.py">

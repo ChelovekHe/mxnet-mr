@@ -1,7 +1,8 @@
 ﻿import mxnet as mx
 import logging
 import numpy as np
-import os
+import os.path
+import argparse
 # Note: The decoded image should be in BGR channel (opencv output)
 # For RGB output such as from skimage, we need to convert it to BGR
 # WRONG channel will lead to WRONG result
@@ -41,7 +42,28 @@ def PreprocessImage(path, show_img=False):
     normed_img = sample - mean_img.asnumpy()
     normed_img.resize(1, 3,20, 20)
     return normed_img
-batch = PreprocessImage('chars/0/0.jpg', True)
-prediction = model.predict(batch)[0]
-label=synset[prediction.argmax()]
-print str(label)+':'+str(prediction[label])
+
+def testdir(datadir):
+    subdir=os.listdir(datadir)
+    resultfile=open("result.txt","w")
+    for sub in subdir:
+        if os.path.isdir(datadir+'/'+sub):
+            print sub+":"
+            resultfile.write(sub+":"+"\n")
+            files=os.listdir(datadir+'/'+sub)
+            for file in files:
+                batch = PreprocessImage(datadir+'/'+sub+"/"+file, True)
+                prediction = model.predict(batch)[0]
+                label=synset[prediction.argmax()]
+                print str(label)+':'+str(prediction[label])
+                resultfile.write(str(label)+':'+str(prediction[label])+"\n")
+    resultfile.close()
+def main():
+    parser = argparse.ArgumentParser(
+        formatter_class=argparse.ArgumentDefaultsHelpFormatter,
+        description='generate synsetwords')
+    parser.add_argument('--datadir', type=str, default='charstest',help='path to folder that contain datasets.')
+    args = parser.parse_args()
+    testdir(args.datadir)
+if __name__=="__main__":
+    main()

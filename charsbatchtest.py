@@ -11,7 +11,7 @@ logger.setLevel(logging.DEBUG)
 
 prefix = "chars/lenetweights"
 num_round = 50
-model = mx.model.FeedForward.load(prefix, num_round, ctx=mx.gpu(), numpy_batch_size=1)
+model = mx.model.FeedForward.load(prefix, num_round, ctx=mx.gpu(), numpy_batch_size=40)
 
 mean_img = mx.nd.load("chars/mean.bin")["mean_img"]
 
@@ -26,7 +26,7 @@ test = mx.io.ImageRecordIter(
     rand_mirror = False,
     data_shape  = data_shape,
     batch_size  = batch_size)
-with open("chars/chars.lst","r")as f :
+with open("charstest/chars.lst","r")as f :
     lsts =f.readlines()
 labels=[]
 for line in lsts:
