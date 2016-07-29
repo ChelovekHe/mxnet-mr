@@ -1,4 +1,4 @@
-mxnet训练自己的数据
+[mxnet](https://github.com/dmlc/mxnet)训练自己的数据
 -----
 
 作为符号式编程和命令式编程的集大成者，mxnet是caffe强有力的替代者，但是由于参考资料很少，现在并没有大规模的普及开来。
@@ -16,9 +16,12 @@ mxnet训练自己的数据
 
 其实无非就下面几个步骤：
 
-1.在windows下安装mxnet，参见[mxnet VS2013编译.pdf](mxnet VS2013编译.pdf)文件，里面很详细的介绍了怎么编译安装mxnet0.5。
+1.安装
+
+在linux下安装mxnet非常方便，直接make就好了，移植到anroid也费不了多少工夫，在windows下要麻烦一些，不过也是可以搞定的，在windows下安装mxnet，参见[mxnet VS2013编译.pdf](mxnet VS2013编译.pdf)文件，里面很详细的介绍了怎么编译安装mxnet0.5。
 
 2.制作样本
+
 chars文件夹是我从车牌识别的开源项目[easypr](https://github.com/liuruoze/EasyPR)中提取的数字0和1的字符样本，为了简单起见，我只提取了2类样本，其实一共有65类之多（字母+数字+汉字），不过只需要把图片文件拷贝过去就好，后面的操作基本一致。
 
 双击generatetrain.bat就可以了，里面的内容很简单，无非是制作图片列表，然后用im2rec装换成它所需的格式，稍微注意下参数的含义，里面
@@ -28,25 +31,36 @@ python make_list.py chars chars/chars --recursive=True
 make_list.py后参数的含义是：数据存放的文件夹、所生成数据列表的文件名前缀（后缀默认是lst）、是否递归处理（也就是进入子文件夹）。
 im2rec是自己编译生成的exe文件，后面参数含义是：上面生成的lst文件、数据所在文件夹、以及生成的记录文件rec。
 
-3.开始训练
+3.定义网络
+
+使用python可以很容易的定义所需的网络结构，无非就是几个symbol而已。
+
+4.开始训练
+
 双击打开VS2013的解决方案mxnettools.sln，设置mxnettools为启动项，charstrain.py为启动文件，Ctrl+F5运行即可，一点需要注意的是每次更换数据集别忘了把均值文件mean.bin删掉让它重新生成
+
 ![train](figures/train.png)
 
-4.进行测试
+5.进行测试
+
 charsbatchtest是用来批量测试的样本，为了简单起见，我提取了前20个样本作为测试集，实际应用中避免这样做。
 制作测试集合训练集的过程大致相同，把charstest.py设为启动文件就可以测试了,经测试精度为100%（修正了之前的错误）。
 
 ![test](figures/test.png)
 
-5.从文件夹进行测试
+6.从文件夹进行测试
+
 本次更新增加了从文件夹进行测试输出预测结果的脚本文件，见charsdirtest.py，结果保存在result.txt里，最开始输出类别名，然后输出每个文件预测的结果和最大概率。
 
+7.工程化应用
 
-6.工程化应用
 charstest.py里面已经包含了用于预测输出的代码，提取需要的部分加入到自己的工程中去吧。
 
-7.FAQ
-Win7编译c++生成的例子不能运行，在win10下能正常运行，原因不明。
+8.FAQ
+
+Win7编译c++生成的测试例子不能运行，在win10下能正常运行，原因不明。
 
 相关：
 [MatConvNet使用指南,训练自己的数据](https://github.com/imistyrain/MatConvNet-mr)
+
+很开心被[mxnet例子](https://github.com/dmlc/mxnet/tree/master/example)收录了，不过作者写错了。
